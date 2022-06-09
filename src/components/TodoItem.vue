@@ -1,7 +1,8 @@
 <template>
-    <div :class="['todo-item', todoProps.completed ? 'is-completed' : '']" :id="new_id">
-        <input type="checkbox" :checked="[todoProps.completed]">{{ todoProps.title }}
-        <button class="del-btn">Delete</button>
+    <div :class="['todo-item', todoProps.completed ? 'is-completed' : '']" >
+        <input type="checkbox" :checked="todoProps.completed" @change="markItemCompleted">
+        {{ todoProps.title }}
+        <button class="del-btn" @click="deleteItem">Delete</button>  
     </div>    
 </template>
 
@@ -9,6 +10,20 @@
 export default {
     name: 'TodoItem',
     props: ['todoProps'],
+    setup(props, context) {
+        const markItemCompleted = () => {
+            context.emit('item-completed', props.todoProps.id);
+        }
+
+        const deleteItem = () => {
+            context.emit('delete-item', props.todoProps.id);
+        }
+
+        return {
+            markItemCompleted,
+            deleteItem
+        }
+    }
 }
 </script>
 
